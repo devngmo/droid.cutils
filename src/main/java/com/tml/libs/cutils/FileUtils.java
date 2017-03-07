@@ -53,6 +53,10 @@ public class FileUtils {
 
     public static void writeAllText(Context c, String json, File f) {
         try {
+            if (f.exists() == false) {
+                if (f.createNewFile() == false)
+                    return;
+            }
             FileOutputStream fos = new FileOutputStream(f);
 
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fos);

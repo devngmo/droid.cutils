@@ -30,31 +30,31 @@ public class AppUtils {
         }
         if (requirePermissions.size() == 0)
             return  true;
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(a,
-                    Manifest.permission.READ_CONTACTS)) {
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(a,
+                requirePermissions.get(0))) {
 //
 //                // Show an explanation to the user *asynchronously* -- don't block
 //                // this thread waiting for the user's response! After the user
 //                // sees the explanation, try again to request the permission.
 
-                ActivityCompat.requestPermissions(a,
-                        new String[]{Manifest.permission.READ_CONTACTS},
-                        REQUEST_CODE_REQUEST_PERMISSION);
+            ActivityCompat.requestPermissions(a,
+                    permissions,
+                    REQUEST_CODE_REQUEST_PERMISSION);
 //
-            } else {
+        } else {
 
-                // No explanation needed, we can request the permission.
+            // No explanation needed, we can request the permission.
 
             Log.d(TAG, "ask for require permissions...");
             ActivityCompat.requestPermissions(a,
-                    new String[]{Manifest.permission.READ_CONTACTS},
+                    permissions,
                     REQUEST_CODE_REQUEST_PERMISSION);
 
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
+            // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+            // app-defined int constant. The callback method gets the
+            // result of the request.
+        }
         return false;
     }
 
@@ -64,6 +64,12 @@ public class AppUtils {
             if (result != PackageManager.PERMISSION_GRANTED)
                 return  false;
         }
+        return true;
+    }
+
+    public static boolean isExternalStoragePermissionGranted(Activity a) {
+        if (ContextCompat.checkSelfPermission(a, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)  return false;
+        if (ContextCompat.checkSelfPermission(a, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)  return false;
         return true;
     }
 }
