@@ -51,17 +51,19 @@ public class FileUtils {
         return text.toString();
     }
 
-    public static void writeAllText(Context c, String json, File f) {
+    public static void writeAllText(Context c, String text, File f) {
         try {
-            if (f.exists() == false) {
-                if (f.createNewFile() == false)
-                    return;
-            }
+            if (f.exists())
+                f.delete();
+
+            if (f.createNewFile() == false)
+                return;
+
             FileOutputStream fos = new FileOutputStream(f);
 
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fos);
             //c.openFileOutput(f.getAbsolutePath(), Context.MODE_PRIVATE));
-            outputStreamWriter.write(json);
+            outputStreamWriter.write(text);
             outputStreamWriter.close();
         }
         catch (IOException e) {
