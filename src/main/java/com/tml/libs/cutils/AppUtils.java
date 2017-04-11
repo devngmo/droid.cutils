@@ -67,6 +67,15 @@ public class AppUtils {
         return true;
     }
 
+    public static boolean isAllPermissionGranted(Context ctx, String[] permissions) {
+        for (String permission : permissions
+                ) {
+            if (ContextCompat.checkSelfPermission(ctx, permission) != PackageManager.PERMISSION_GRANTED)
+                return false;
+        }
+        return true;
+    }
+
     public static boolean isExternalStoragePermissionGranted(Activity a) {
         if (ContextCompat.checkSelfPermission(a, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)  return false;
         if (ContextCompat.checkSelfPermission(a, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)  return false;
