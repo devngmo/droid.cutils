@@ -17,30 +17,42 @@ public class StaticLogger {
         curAppTag = tag;
     }
     public static void enableLog(Object obj) {
-        enableLogClasses.add( obj.getClass().getName() );
+        enableLogClasses.add( obj.getClass().getSimpleName() );
     }
 
     public static void enableLog(String className) {
+        if (enableLogClasses.contains(className)) return;
         enableLogClasses.add( className );
     }
 
     public static void D(Object sender, String msg) {
-        String clsName = sender.getClass().getName();
+        String clsName = sender.getClass().getSimpleName();
         if (enableLogClasses.contains(clsName)) {
             Log.d(curAppTag, clsName + "::" + msg);
         }
     }
 
     public static void D(String className, String msg) {
+        Log.d(curAppTag, className + ":" + msg);
         if (enableLogClasses.contains(className)) {
             Log.d(curAppTag, className + "::" + msg);
         }
     }
 
     public static void E(Object sender, String msg) {
-        String clsName = sender.getClass().getName();
+        String clsName = sender.getClass().getSimpleName();
         if (logErrorOnAnyClasses) {
             Log.e(curAppTag, clsName + "::" + msg);
         }
+    }
+
+    public static void E(String clsName, String msg) {
+        if (logErrorOnAnyClasses) {
+            Log.e(curAppTag, clsName + "::" + msg);
+        }
+        else if (enableLogClasses.contains(clsName))
+            Log.e(curAppTag, clsName + "::" + msg);
+
+
     }
 }
