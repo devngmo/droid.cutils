@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by TML on 5/16/2017.
@@ -30,5 +31,31 @@ public class ListUtils {
                     return -a.compareTo(b);
             }
         });
+    }
+
+    public static List<Integer> createIndicesList(int min, int max) {
+        List<Integer> ls = new ArrayList<>();
+        for (int i = min; i <= max; i++) {
+            ls.add(i);
+        }
+        return ls;
+    }
+
+
+
+    public static List<Integer> createRandomIndicesList(int min, int max) {
+        List<Integer> ls = new ArrayList<>();
+        for (int i = min; i <= max; i++) {
+            ls.add(i);
+        }
+
+        Random rnd = new Random();
+        List<Integer> lsrand = new ArrayList<>();
+        while(ls.size() > 0) {
+            int index = rnd.nextInt(ls.size());
+            lsrand.add(ls.get(index));
+            ls.remove(index);
+        }
+        return lsrand;
     }
 }

@@ -30,4 +30,20 @@ public class MathUtils {
     public static float clamp(float value, float min, float max) {
         return clamp(value, min, max, CLAMP_EPSILON);
     }
+
+    public static float getHours(int millisecond) {
+        return getMinutes(millisecond) / 60;
+    }
+
+    public static float getMinutes(int millisecond) {
+        return getSeconds(millisecond) / 60;
+    }
+
+    public static float getSeconds(int millisecond) {
+        return millisecond / 1000.0f;
+    }
+
+    public static int getSecondsOfHours(int hours) {
+        return hours * 60 * 60;
+    }
 }
