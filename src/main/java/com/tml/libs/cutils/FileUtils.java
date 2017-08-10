@@ -3,6 +3,7 @@ package com.tml.libs.cutils;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
 import android.os.Environment;
 import android.util.Log;
 
@@ -330,6 +331,24 @@ public class FileUtils {
             }
             in.close();
             out.close();
+        }
+    }
+
+    public static void saveBitmap(Bitmap bmp, String filePath) {
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(filePath);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, out); // bmp is your Bitmap instance
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

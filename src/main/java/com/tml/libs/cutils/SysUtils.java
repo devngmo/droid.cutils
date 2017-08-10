@@ -2,6 +2,7 @@ package com.tml.libs.cutils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.IBinder;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -36,5 +37,10 @@ public class SysUtils {
         InputMethodManager imm = (InputMethodManager)c.getSystemService(
                 Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(binder, 0);
+    }
+
+    public static void openCameraTakePicture(Activity a, int requestCode) {
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        a.startActivityForResult(cameraIntent, requestCode);
     }
 }

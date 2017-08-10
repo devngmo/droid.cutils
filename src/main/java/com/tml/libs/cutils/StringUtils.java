@@ -2,9 +2,14 @@ package com.tml.libs.cutils;
 
 import android.util.Base64;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DateFormat;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import javax.crypto.Cipher;
@@ -64,5 +69,43 @@ public class StringUtils {
         }
         return text;
     }
+
+    public static String getString(JSONObject obj, String key, String defaultValue) throws JSONException {
+        if (obj.has(key))
+            return obj.getString(key);
+        return defaultValue;
+    }
+
+    public static int getInt(JSONObject obj, String key, int value) throws JSONException {
+        if (obj.has(key))
+            return obj.getInt(key);
+        return value;
+    }
+
+    public static Date stringToDate(String str, String format) {
+        if(str==null) return null;
+        ParsePosition pos = new ParsePosition(0);
+        SimpleDateFormat simpledateformat = new SimpleDateFormat(format);
+        Date stringDate = simpledateformat.parse(str, pos);
+        return stringDate;
+    }
+
+    public static Calendar getCalendar(Date date) {
+        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+        cal.setTime(date);
+        return cal;
+    }
+
+    public static int getDiffYears(Date first, Date last) {
+        Calendar a = getCalendar(first);
+        Calendar b = getCalendar(last);
+        int diff = b.get(Calendar.YEAR) - a.get(Calendar.YEAR);
+        if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
+                (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DATE) > b.get(Calendar.DATE))) {
+            diff--;
+        }
+        return Math.abs(diff);
+    }
+
 
 }
