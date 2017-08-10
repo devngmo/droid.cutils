@@ -22,7 +22,7 @@ public class MinMax {
     }
 
     public float getRandomValueInRange() {
-        return min + MathUtils.getRand().nextFloat() * getRangeSize();
+        return MathUtils.clamp(min + MathUtils.getRand().nextFloat() * getRangeSize(), min, max);
     }
 
     /**

@@ -2,6 +2,7 @@ package com.tml.libs.cutils;
 
 import android.util.Log;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +30,14 @@ public class StaticLogger {
         String clsName = sender.getClass().getSimpleName();
         if (enableLogClasses.contains(clsName)) {
             Log.d(curAppTag, clsName + "::" + msg);
+            //System.out.println(clsName + "::" + msg);
         }
     }
 
     public static void D(String className, String msg) {
-        Log.d(curAppTag, className + ":" + msg);
         if (enableLogClasses.contains(className)) {
             Log.d(curAppTag, className + "::" + msg);
+            //System.out.println(className + "::" + msg);
         }
     }
 
