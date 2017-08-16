@@ -44,4 +44,13 @@ public class MinMax {
     public boolean contains(int val) {
         return min <= val && val <= max;
     }
+
+    public void minRoundTo(int d) {
+        int k = (int)(min / d);
+        min = k * d;
+    }
+
+    public void setMax(float max) {
+        this.max = max;
+    }
 }
