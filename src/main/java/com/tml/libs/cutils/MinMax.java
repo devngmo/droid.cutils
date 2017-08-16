@@ -35,4 +35,9 @@ public class MinMax {
         min = Float.parseFloat( parts[0]);
         max = Float.parseFloat( parts[1]);
     }
+
+    @Override
+    public String toString() {
+        return String.format("%.1f-%.1f", min, max);
+    }
 }
