@@ -92,17 +92,44 @@ public class FileUtils {
         }
     }
 
-    public static List<String> readStringLines(Context context, String path) {
+    public static void writeAllText(Context c, List<String> lines, String lineBreak, File f) {
+        try {
+            if (f.exists())
+                f.delete();
+
+            if (f.createNewFile() == false)
+                return;
+
+            FileOutputStream fos = new FileOutputStream(f);
+
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fos);
+            //c.openFileOutput(f.getAbsolutePath(), Context.MODE_PRIVATE));
+            for (int i = 0; i < lines.size(); i++) {
+                outputStreamWriter.write(lines.get(i));
+                if (i < lines.size() - 1)
+                    outputStreamWriter.write(lineBreak);
+            }
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<String> readStringLines(String path, boolean skipEmptyLine) {
         List<String> results = new ArrayList<>();
         BufferedReader reader;
 
         try{
-            final InputStream file = context.getAssets().open(path);
-            reader = new BufferedReader(new InputStreamReader(file));
+            reader = new BufferedReader(new FileReader(path));
             String line = reader.readLine();
             while(line != null){
                 line = line.trim();
-                if (line.length() > 0)
+                if (skipEmptyLine) {
+                    if (line.length() > 0)
+                        results.add(line);
+                }
+                else
                     results.add(line);
                 line = reader.readLine();
             }
