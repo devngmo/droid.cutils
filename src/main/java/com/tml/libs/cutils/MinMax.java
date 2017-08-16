@@ -40,4 +40,8 @@ public class MinMax {
     public String toString() {
         return String.format("%.1f-%.1f", min, max);
     }
+
+    public boolean contains(int val) {
+        return min <= val && val <= max;
+    }
 }
