@@ -77,6 +77,12 @@ public class HTMLGen {
         curNode.childs.add(e);
         return this;
     }
+    public HTMLGen Text(String text) {
+        HTMLElement e = new HTMLElement("div");
+        e.childs.add(new HTMLTextNode("text", text));
+        curNode.childs.add(e);
+        return this;
+    }
 
     @Override
     public String toString() {
