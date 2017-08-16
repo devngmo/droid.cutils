@@ -3,7 +3,9 @@ package com.tml.libs.cutils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.IBinder;
+import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -24,6 +26,15 @@ public class SysUtils {
             InputMethodManager inputMethodManager = (InputMethodManager) a.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(a.getCurrentFocus().getWindowToken(), 0);
         }
+    }
+
+    public static Point getScreenSize(Activity c) {
+        Display display = c.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+        return size;
     }
 
     public void showSoftKeyboard(Context c, View v) {
