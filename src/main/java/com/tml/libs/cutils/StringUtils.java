@@ -70,6 +70,17 @@ public class StringUtils {
         return text;
     }
 
+    public static String removeSpaceMoreThan(String src, int spaceLength) {
+        String space = "";
+        String result = src;
+        for (int i = 0; i < spaceLength; i++) {
+            space += " ";
+        }
+        while(result.indexOf(space + " ") > 0) {
+            result = result.replaceAll(space + " ", space);
+        }
+        return result;
+    }
     public static String getString(JSONObject obj, String key, String defaultValue) throws JSONException {
         if (obj.has(key))
             return obj.getString(key);
