@@ -31,9 +31,14 @@ public class MinMax {
      *             <br/>example: 6-7
      */
     public void set(String text) {
-        String[] parts = text.split("-");
-        min = Float.parseFloat( parts[0]);
-        max = Float.parseFloat( parts[1]);
+        if(text.contains("-")) {
+            String[] parts = text.split("-");
+            min = Float.parseFloat(parts[0]);
+            max = Float.parseFloat(parts[1]);
+        }
+        else {
+            min = max = Float.parseFloat(text);
+        }
     }
 
     @Override
