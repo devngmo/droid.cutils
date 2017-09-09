@@ -57,4 +57,8 @@ public class StaticLogger {
 
 
     }
+
+    public static void D(String msg) {
+        Log.d(curAppTag, msg);
+    }
 }
