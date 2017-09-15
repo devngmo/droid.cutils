@@ -12,4 +12,16 @@ public class LoggableClass {
     public void E(String msg) {
         StaticLogger.E(this, msg);
     }
+
+    public void E(String msg, Exception ex) {
+        StaticLogger.E(this, msg, ex);
+    }
+
+    public void W(String msg) {
+        StaticLogger.W(this, msg);
+    }
+
+    public void I(String msg) {
+        StaticLogger.I(this, msg);
+    }
 }

@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.ParsePosition;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,6 +23,19 @@ import javax.crypto.spec.DESKeySpec;
  */
 
 public class StringUtils {
+
+    public static Calendar fromString(String text, String format, Locale locale) throws ParseException {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat(format, locale);
+        cal.setTime(sdf.parse(text));// all done
+        return cal;
+    }
+
+    public static String getString(Calendar c, String format, Locale locale) {
+        DateFormat df = new SimpleDateFormat(format, Locale.ENGLISH);
+        return df.format(c.getTime());
+    }
+
     public static String createDateTimeStr_yyyy_MM_dd_HH_mm_ss() {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         Calendar c = Calendar.getInstance();

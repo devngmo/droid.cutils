@@ -34,6 +34,20 @@ public class StaticLogger {
         }
     }
 
+    public static void W(Object sender, String msg) {
+        String clsName = sender.getClass().getSimpleName();
+        if (enableLogClasses.contains(clsName)) {
+            Log.w(curAppTag, clsName + "::" + msg);
+        }
+    }
+
+    public static void I(Object sender, String msg) {
+        String clsName = sender.getClass().getSimpleName();
+        if (enableLogClasses.contains(clsName)) {
+            Log.i(curAppTag, clsName + "::" + msg);
+        }
+    }
+
     public static void D(String className, String msg) {
         if (enableLogClasses.contains(className)) {
             Log.d(curAppTag, className + "::" + msg);
@@ -45,6 +59,14 @@ public class StaticLogger {
         String clsName = sender.getClass().getSimpleName();
         if (logErrorOnAnyClasses) {
             Log.e(curAppTag, clsName + "::" + msg);
+        }
+    }
+
+    public static void E(Object sender, String msg, Exception ex) {
+        String clsName = sender.getClass().getSimpleName();
+        if (logErrorOnAnyClasses) {
+            Log.e(curAppTag, clsName + "::" + msg);
+            ex.printStackTrace();
         }
     }
 
