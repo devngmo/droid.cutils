@@ -120,4 +120,16 @@ public class SysUtils {
             e.printStackTrace();
         }
     }
+
+    public static String getPhoneSubscriberNumber(Context c) {
+        TelephonyManager telephony = (TelephonyManager) c.getSystemService(
+                Context.TELEPHONY_SERVICE);
+        try {
+            return telephony.getSubscriberId();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return "0";
+    }
 }
