@@ -40,6 +40,12 @@ public class StaticLogger {
             Log.w(curAppTag, clsName + "::" + msg);
         }
     }
+    public static void W(String tag, String msg) {
+        Log.w(curAppTag, tag + "::" + msg);
+    }
+    public static void W(String msg) {
+        Log.w(curAppTag, msg);
+    }
 
     public static void I(Object sender, String msg) {
         String clsName = sender.getClass().getSimpleName();
@@ -59,6 +65,26 @@ public class StaticLogger {
         String clsName = sender.getClass().getSimpleName();
         if (logErrorOnAnyClasses) {
             Log.e(curAppTag, clsName + "::" + msg);
+        }
+    }
+
+    public static void E(String msg) {
+        if (logErrorOnAnyClasses) {
+            Log.e(curAppTag, msg);
+        }
+    }
+
+    public static void E(Exception ex) {
+        if (logErrorOnAnyClasses) {
+            Log.e(curAppTag, ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    public static void E(String msg, Exception ex) {
+        if (logErrorOnAnyClasses) {
+            Log.e(curAppTag, msg + " EXCEPTION MSG:" + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
