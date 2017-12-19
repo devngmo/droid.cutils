@@ -102,11 +102,10 @@ public class StaticLogger {
         }
         else if (enableLogClasses.contains(clsName))
             Log.e(curAppTag, clsName + "::" + msg);
-
-
     }
 
     public static void D(String msg) {
-        Log.d(curAppTag, msg);
+        if (curAppTag != null)
+            Log.d(curAppTag, msg);
     }
 }
