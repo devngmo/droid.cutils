@@ -1,7 +1,5 @@
 package com.tml.libs.cutils;
 
-import android.util.Log;
-
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +9,29 @@ import java.util.List;
  */
 
 public class StaticLogger {
+    public interface LogStreamer {
+        void D(String appTag, String className, String msg);
+        void E(String appTag, String className, String msg);
+        void E(String appTag, String className, String msg, Exception ex);
+        void W(String appTag, String className, String msg);
+        void I(String appTag, String className, String msg);
+    }
+
+    static LogStreamer logStreamer;
+
+    public static void setLogStreamer(LogStreamer streamer) {
+        logStreamer = streamer;
+    }
+
+    public static LogStreamer getLogStreamer() {
+        return logStreamer;
+    }
+
     static List<String> enableLogClasses = new ArrayList<>();
     static String curAppTag;
     public static boolean logErrorOnAnyClasses = true;
+
+
     public static void setAppTag(String tag) {
         curAppTag = tag;
     }
@@ -29,34 +47,33 @@ public class StaticLogger {
     public static void D(Object sender, String msg) {
         String clsName = sender.getClass().getSimpleName();
         if (enableLogClasses.contains(clsName)) {
-            Log.d(curAppTag, clsName + "::" + msg);
-            //System.out.println(clsName + "::" + msg);
+            logStreamer.D(curAppTag, clsName, msg);
         }
     }
 
     public static void W(Object sender, String msg) {
         String clsName = sender.getClass().getSimpleName();
         if (enableLogClasses.contains(clsName)) {
-            Log.w(curAppTag, clsName + "::" + msg);
+            logStreamer.W(curAppTag, clsName, msg);
         }
     }
     public static void W(String tag, String msg) {
-        Log.w(curAppTag, tag + "::" + msg);
+        logStreamer.W(curAppTag, tag, msg);
     }
     public static void W(String msg) {
-        Log.w(curAppTag, msg);
+        logStreamer.W(curAppTag, "", msg);
     }
 
     public static void I(Object sender, String msg) {
         String clsName = sender.getClass().getSimpleName();
         if (enableLogClasses.contains(clsName)) {
-            Log.i(curAppTag, clsName + "::" + msg);
+            logStreamer.I(curAppTag, clsName, msg);
         }
     }
 
     public static void D(String className, String msg) {
         if (enableLogClasses.contains(className)) {
-            Log.d(curAppTag, className + "::" + msg);
+            logStreamer.D(curAppTag, className, msg);
             //System.out.println(className + "::" + msg);
         }
     }
@@ -64,48 +81,47 @@ public class StaticLogger {
     public static void E(Object sender, String msg) {
         String clsName = sender.getClass().getSimpleName();
         if (logErrorOnAnyClasses) {
-            Log.e(curAppTag, clsName + "::" + msg);
+            logStreamer.E(curAppTag, clsName, msg);
         }
     }
 
     public static void E(String msg) {
         if (logErrorOnAnyClasses) {
-            Log.e(curAppTag, msg);
+            logStreamer.E(curAppTag, "", msg);
         }
     }
 
     public static void E(Exception ex) {
         if (logErrorOnAnyClasses) {
-            Log.e(curAppTag, ex.getMessage());
-            ex.printStackTrace();
+            logStreamer.E(curAppTag, "", "", ex);
         }
     }
 
     public static void E(String msg, Exception ex) {
         if (logErrorOnAnyClasses) {
-            Log.e(curAppTag, msg + " EXCEPTION MSG:" + ex.getMessage());
-            ex.printStackTrace();
+            logStreamer.E(curAppTag, "", msg, ex);
         }
     }
 
     public static void E(Object sender, String msg, Exception ex) {
         String clsName = sender.getClass().getSimpleName();
         if (logErrorOnAnyClasses) {
-            Log.e(curAppTag, clsName + "::" + msg);
-            ex.printStackTrace();
+            logStreamer.E(curAppTag, clsName, msg, ex);
         }
     }
 
     public static void E(String clsName, String msg) {
         if (logErrorOnAnyClasses) {
-            Log.e(curAppTag, clsName + "::" + msg);
+            logStreamer.E(curAppTag, clsName, msg);
         }
         else if (enableLogClasses.contains(clsName))
-            Log.e(curAppTag, clsName + "::" + msg);
+            logStreamer.E(curAppTag, clsName, msg);
+
+
     }
 
     public static void D(String msg) {
         if (curAppTag != null)
-            Log.d(curAppTag, msg);
+            logStreamer.D(curAppTag, "", msg);
     }
 }
