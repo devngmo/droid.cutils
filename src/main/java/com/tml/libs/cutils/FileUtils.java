@@ -48,7 +48,8 @@ public class FileUtils {
             br.close();
         }
         catch (IOException e) {
-            //You'll need to add proper error handling here
+            Log.e("FileUtils", "readAllText " + file.getAbsolutePath());
+            e.printStackTrace();
         }
         return text.toString();
     }
