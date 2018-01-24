@@ -45,83 +45,124 @@ public class StaticLogger {
     }
 
     public static void D(Object sender, String msg) {
-        String clsName = sender.getClass().getSimpleName();
+        if (!isPrintable()) return;
+
+        String clsName = "null";
+        if (sender != null)
+            clsName = sender.getClass().getSimpleName();
         if (enableLogClasses.contains(clsName)) {
-            logStreamer.D(curAppTag, clsName, msg);
+                logStreamer.D(curAppTag, clsName, msg);
         }
     }
 
     public static void W(Object sender, String msg) {
-        String clsName = sender.getClass().getSimpleName();
+        if (!isPrintable()) return;
+
+        String clsName = "null";
+        if (sender != null)
+            clsName = sender.getClass().getSimpleName();
+
         if (enableLogClasses.contains(clsName)) {
             logStreamer.W(curAppTag, clsName, msg);
         }
     }
     public static void W(String tag, String msg) {
-        logStreamer.W(curAppTag, tag, msg);
+        if (!isPrintable()) return;
+
+         logStreamer.W(curAppTag, tag, msg);
     }
     public static void W(String msg) {
-        logStreamer.W(curAppTag, "", msg);
+        if (!isPrintable()) return;
+
+         logStreamer.W(curAppTag, "", msg);
     }
 
     public static void I(Object sender, String msg) {
-        String clsName = sender.getClass().getSimpleName();
+        if (!isPrintable()) return;
+
+        String clsName = "null";
+        if (sender != null)
+            clsName = sender.getClass().getSimpleName();
+
         if (enableLogClasses.contains(clsName)) {
-            logStreamer.I(curAppTag, clsName, msg);
+             logStreamer.I(curAppTag, clsName, msg);
         }
     }
 
     public static void D(String className, String msg) {
+        if (!isPrintable()) return;
+
         if (enableLogClasses.contains(className)) {
-            logStreamer.D(curAppTag, className, msg);
+             logStreamer.D(curAppTag, className, msg);
             //System.out.println(className + "::" + msg);
         }
     }
 
     public static void E(Object sender, String msg) {
-        String clsName = sender.getClass().getSimpleName();
+        if (!isPrintable()) return;
+
+        String clsName = "null";
+        if (sender != null)
+            clsName = sender.getClass().getSimpleName();
+
         if (logErrorOnAnyClasses) {
-            logStreamer.E(curAppTag, clsName, msg);
+             logStreamer.E(curAppTag, clsName, msg);
         }
     }
 
     public static void E(String msg) {
+        if (!isPrintable()) return;
+
         if (logErrorOnAnyClasses) {
             logStreamer.E(curAppTag, "", msg);
         }
     }
 
     public static void E(Exception ex) {
+        if (!isPrintable()) return;
+
+
         if (logErrorOnAnyClasses) {
             logStreamer.E(curAppTag, "", "", ex);
         }
     }
 
     public static void E(String msg, Exception ex) {
+        if (!isPrintable()) return;
+
         if (logErrorOnAnyClasses) {
             logStreamer.E(curAppTag, "", msg, ex);
         }
     }
 
     public static void E(Object sender, String msg, Exception ex) {
-        String clsName = sender.getClass().getSimpleName();
+        if (!isPrintable()) return;
+
+        String clsName = "null";
+        if (sender != null)
+            clsName = sender.getClass().getSimpleName();
+
         if (logErrorOnAnyClasses) {
             logStreamer.E(curAppTag, clsName, msg, ex);
         }
     }
 
     public static void E(String clsName, String msg) {
+        if (!isPrintable()) return;
+
         if (logErrorOnAnyClasses) {
             logStreamer.E(curAppTag, clsName, msg);
         }
         else if (enableLogClasses.contains(clsName))
             logStreamer.E(curAppTag, clsName, msg);
-
-
     }
 
+    public static boolean isPrintable() {
+        return (curAppTag != null) && (logStreamer != null);
+    }
     public static void D(String msg) {
-        if (curAppTag != null)
-            logStreamer.D(curAppTag, "", msg);
+        if (!isPrintable()) return;
+
+        logStreamer.D(curAppTag, "", msg);
     }
 }
