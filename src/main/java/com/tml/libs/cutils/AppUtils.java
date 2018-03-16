@@ -18,6 +18,13 @@ import java.util.List;
 public class AppUtils {
     private static final String TAG = "AppUtils";
     public static final int REQUEST_CODE_REQUEST_PERMISSION = 5000;
+
+    /**
+     *
+     * @param a
+     * @param permissions
+     * @return True if no permission is required
+     */
     public static boolean askForPermissionIfNeed(Activity a, String[] permissions) {
         List<String> requirePermissions = new ArrayList<>();
         for (String p : permissions
