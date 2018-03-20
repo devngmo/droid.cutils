@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Build;
+import android.os.Environment;
 import android.os.IBinder;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -131,5 +132,25 @@ public class SysUtils {
             ex.printStackTrace();
         }
         return "0";
+    }
+
+    public static boolean canWriteToExternalSD(Context context) {
+        boolean mExternalStorageAvailable = false;
+        boolean mExternalStorageWriteable = false;
+        String state = Environment.getExternalStorageState();
+
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            // We can read and write the media
+            mExternalStorageAvailable = mExternalStorageWriteable = true;
+        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            // We can only read the media
+            mExternalStorageAvailable = true;
+            mExternalStorageWriteable = false;
+        } else {
+            // Something else is wrong. It may be one of many other states, but all we need
+            //  to know is we can neither read nor write
+            mExternalStorageAvailable = mExternalStorageWriteable = false;
+        }
+        return mExternalStorageAvailable && mExternalStorageWriteable;
     }
 }
