@@ -132,5 +132,20 @@ public class StringUtils {
         return Math.abs(diff);
     }
 
-
+    public static float safeParseFloat(String text) {
+        try {
+            return Float.parseFloat(text);
+        }
+        finally {
+            return 0;
+        }
+    }
+    public static int safeParseInt(String text) {
+        try {
+            return Integer.parseInt(text);
+        }
+        finally {
+            return 0;
+        }
+    }
 }

@@ -33,11 +33,11 @@ public class MinMax {
     public void set(String text) {
         if(text.contains("-")) {
             String[] parts = text.split("-");
-            min = Float.parseFloat(parts[0]);
-            max = Float.parseFloat(parts[1]);
+            min = StringUtils.safeParseFloat(parts[0]);
+            max = StringUtils.safeParseFloat(parts[1]);
         }
         else {
-            min = max = Float.parseFloat(text);
+            min = max = StringUtils.safeParseFloat(text);
         }
     }
 
