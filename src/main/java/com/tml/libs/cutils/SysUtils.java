@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
+import android.support.v4.app.FragmentActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Display;
@@ -152,5 +156,26 @@ public class SysUtils {
             mExternalStorageAvailable = mExternalStorageWriteable = false;
         }
         return mExternalStorageAvailable && mExternalStorageWriteable;
+    }
+
+    static long lastPlayTimeStick = 0;
+    static Ringtone ringtone = null;
+    public static void playNotificationSound(Context context) {
+        try {
+            long d = System.currentTimeMillis() - lastPlayTimeStick;
+            if (d < 500)
+                return;
+
+            lastPlayTimeStick = System.currentTimeMillis();
+            boolean needCreateNewRingtone = ringtone == null;
+
+            if (needCreateNewRingtone) {
+                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                ringtone = RingtoneManager.getRingtone(context, notification);
+            }
+            ringtone.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
