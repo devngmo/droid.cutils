@@ -136,7 +136,8 @@ public class StringUtils {
         try {
             return Float.parseFloat(text);
         }
-        finally {
+        catch (Exception ex){
+            //StaticLogger.E("can not parse float " + text, ex);
             return 0;
         }
     }
@@ -144,7 +145,8 @@ public class StringUtils {
         try {
             return Integer.parseInt(text);
         }
-        finally {
+        catch (Exception ex){
+            //StaticLogger.E("can not parse INT " + text, ex);
             return 0;
         }
     }
