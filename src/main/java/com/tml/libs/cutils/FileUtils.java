@@ -24,6 +24,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.file.attribute.FileStoreAttributeView;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,6 +88,23 @@ public class FileUtils {
             //c.openFileOutput(f.getAbsolutePath(), Context.MODE_PRIVATE));
             outputStreamWriter.write(text);
             outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeAllBytes(Context c, byte[] data, File f) {
+        try {
+            if (f.exists())
+                f.delete();
+
+            if (f.createNewFile() == false)
+                return;
+
+            FileOutputStream fos = new FileOutputStream(f);
+            fos.write(data);
+            fos.close();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -179,6 +197,28 @@ public class FileUtils {
             if (outChannel != null)
                 outChannel.close();
         }
+    }
+
+    public static boolean copyFile(File src, File dst) {
+        try {
+            StaticLogger.D( "copyFile: src " + src.getAbsolutePath() + " dst " + dst.getAbsolutePath());
+            FileChannel inChannel = new FileInputStream(src).getChannel();
+            FileChannel outChannel = new FileOutputStream(dst).getChannel();
+            try {
+                inChannel.transferTo(0, inChannel.size(), outChannel);
+
+            } finally {
+                if (inChannel != null)
+                    inChannel.close();
+                if (outChannel != null)
+                    outChannel.close();
+            }
+            return true;
+        }
+        catch (Exception ex) {
+            StaticLogger.E(ex);
+        }
+        return false;
     }
 
     public static void copyAssetFileToSD(AssetManager am, String srcFilePath, File sdFile)  {
