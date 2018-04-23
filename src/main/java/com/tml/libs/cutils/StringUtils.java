@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -149,5 +150,9 @@ public class StringUtils {
             //StaticLogger.E("can not parse INT " + text, ex);
             return 0;
         }
+    }
+    public static Date getTimeFromString(String format, String timeStr) throws ParseException {
+        SimpleDateFormat simpledateformat = new SimpleDateFormat(format);
+        return simpledateformat.parse(timeStr);
     }
 }
