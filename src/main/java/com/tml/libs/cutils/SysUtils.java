@@ -1,5 +1,6 @@
 package com.tml.libs.cutils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -29,13 +30,15 @@ public class SysUtils {
     {
         InputMethodManager imm = (InputMethodManager)c.getSystemService(
                 Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+        if (imm != null)
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
     }
 
     public static void hideSoftKeyboard(Activity a) {
         if(a.getCurrentFocus()!=null) {
             InputMethodManager inputMethodManager = (InputMethodManager) a.getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(a.getCurrentFocus().getWindowToken(), 0);
+            if (inputMethodManager != null)
+                inputMethodManager.hideSoftInputFromWindow(a.getCurrentFocus().getWindowToken(), 0);
         }
     }
 
@@ -50,15 +53,19 @@ public class SysUtils {
 
     public void showSoftKeyboard(Context c, View v) {
         InputMethodManager inputMethodManager = (InputMethodManager) c.getSystemService(Context.INPUT_METHOD_SERVICE);
-        v.requestFocus();
-        inputMethodManager.showSoftInput(v, 0);
+        if (v != null)
+            v.requestFocus();
+
+        if (inputMethodManager != null)
+            inputMethodManager.showSoftInput(v, 0);
     }
 
     public static void hideSoftKeyboard(Context c, IBinder binder)
     {
         InputMethodManager imm = (InputMethodManager)c.getSystemService(
                 Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(binder, 0);
+        if (imm != null)
+            imm.hideSoftInputFromWindow(binder, 0);
     }
 
     public static void openCameraTakePicture(Activity a, int requestCode) {
@@ -66,11 +73,15 @@ public class SysUtils {
         a.startActivityForResult(cameraIntent, requestCode);
     }
 
+    @SuppressLint({"MissingPermission", "HardwareIds"})
     public static String getPhoneNumber(Context c) {
         TelephonyManager telephony = (TelephonyManager) c.getSystemService(
                 Context.TELEPHONY_SERVICE);
         try {
-            String phoneNo = telephony.getLine1Number();
+            String phoneNo = null;
+            if (telephony != null) {
+                phoneNo = telephony.getLine1Number();
+            }
             if (phoneNo == null || phoneNo.length() < 1)
                 phoneNo = "0";
 
@@ -88,11 +99,15 @@ public class SysUtils {
         return "0";
     }
 
+    @SuppressLint({"MissingPermission", "HardwareIds"})
     public static String getIMEINumber(Context c) {
         TelephonyManager telephony = (TelephonyManager) c.getSystemService(
                 Context.TELEPHONY_SERVICE);
         try {
-            String imei = telephony.getDeviceId();
+            String imei = null;
+            if (telephony != null) {
+                imei = telephony.getDeviceId();
+            }
             if (imei == null || imei.length() < 1)
                 imei = "0";
 
@@ -126,11 +141,14 @@ public class SysUtils {
         }
     }
 
+    @SuppressLint({"MissingPermission", "HardwareIds"})
     public static String getPhoneSubscriberNumber(Context c) {
         TelephonyManager telephony = (TelephonyManager) c.getSystemService(
                 Context.TELEPHONY_SERVICE);
         try {
-            return telephony.getSubscriberId();
+            if (telephony != null) {
+                return telephony.getSubscriberId();
+            }
         }
         catch (Exception ex) {
             ex.printStackTrace();
