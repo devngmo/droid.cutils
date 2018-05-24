@@ -41,7 +41,6 @@ public class FileUtils {
 
     public static String readAllText(File file) {
         StringBuilder text = new StringBuilder();
-
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
@@ -158,7 +157,7 @@ public class FileUtils {
             }
 
         } catch(IOException ioe){
-            ioe.printStackTrace();
+            StaticLogger.E("FileUtils", ioe);
         }
         return  results;
     }

@@ -155,4 +155,33 @@ public class StringUtils {
         SimpleDateFormat simpledateformat = new SimpleDateFormat(format);
         return simpledateformat.parse(timeStr);
     }
+
+    /**
+     * Default First day of week is SUNDAY
+     * @param yyyymmdd
+     * @param weekFirstDayIsMonday
+     * @return
+     */
+    public static int getWeekOfYYYYMMDD(String yyyymmdd, boolean weekFirstDayIsMonday) {
+        Locale locale = Locale.US; // Sunday first
+        if (weekFirstDayIsMonday)
+            locale = Locale.GERMANY; // Monday First
+
+        Calendar c = Calendar.getInstance(locale);
+        int yyyy = Integer.parseInt( yyyymmdd.substring(0, 4) );
+        int mm = Integer.parseInt( yyyymmdd.substring(4, 6) );
+        int dd = Integer.parseInt( yyyymmdd.substring(6, 8) );
+        c.set(yyyy,mm-1,dd);
+        return c.get(Calendar.WEEK_OF_YEAR);
+    }
+
+    public static int getWeekOfDay(Calendar c, boolean weekFirstDayIsMonday) {
+        Locale locale = Locale.US; // Sunday first
+        if (weekFirstDayIsMonday)
+            locale = Locale.GERMANY; // Monday First
+
+        Calendar b = Calendar.getInstance(locale);
+        b.setTime(c.getTime());
+        return b.get(Calendar.WEEK_OF_YEAR);
+    }
 }
