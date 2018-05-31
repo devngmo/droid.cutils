@@ -32,4 +32,6 @@ public class LogcatStreamer implements StaticLogger.LogStreamer {
     public void I(String appTag, String className, String msg) {
         Log.i(appTag, className + "::" + msg);
     }
+
+
 }

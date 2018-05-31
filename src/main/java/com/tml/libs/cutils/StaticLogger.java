@@ -48,8 +48,11 @@ public class StaticLogger {
         if (!isPrintable()) return;
 
         String clsName = "null";
-        if (sender != null)
+        if (sender instanceof String)
+            clsName = (String)sender;
+        else if (sender != null)
             clsName = sender.getClass().getSimpleName();
+
         if (enableLogClasses.contains(clsName)) {
                 logStreamer.D(curAppTag, clsName, msg);
         }
@@ -59,7 +62,9 @@ public class StaticLogger {
         if (!isPrintable()) return;
 
         String clsName = "null";
-        if (sender != null)
+        if (sender instanceof String)
+            clsName = (String)sender;
+        else if (sender != null)
             clsName = sender.getClass().getSimpleName();
 
         if (enableLogClasses.contains(clsName)) {
@@ -81,7 +86,9 @@ public class StaticLogger {
         if (!isPrintable()) return;
 
         String clsName = "null";
-        if (sender != null)
+        if (sender instanceof String)
+            clsName = (String)sender;
+        else if (sender != null)
             clsName = sender.getClass().getSimpleName();
 
         if (enableLogClasses.contains(clsName)) {
@@ -102,7 +109,9 @@ public class StaticLogger {
         if (!isPrintable()) return;
 
         String clsName = "null";
-        if (sender != null)
+        if (sender instanceof String)
+            clsName = (String)sender;
+        else if (sender != null)
             clsName = sender.getClass().getSimpleName();
 
         if (logErrorOnAnyClasses) {
