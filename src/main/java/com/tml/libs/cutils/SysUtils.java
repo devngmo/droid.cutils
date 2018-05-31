@@ -1,9 +1,11 @@
 package com.tml.libs.cutils;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -12,6 +14,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Display;
@@ -20,6 +23,8 @@ import android.view.inputmethod.InputMethodManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by TML on 4/26/2017.
@@ -75,6 +80,12 @@ public class SysUtils {
 
     @SuppressLint({"MissingPermission", "HardwareIds"})
     public static String getPhoneNumber(Context c) {
+        if (ContextCompat.checkSelfPermission(c,
+                Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            StaticLogger.D("Permission : READ_PHONE_STATE NOT GRANTED!!!");
+            return "0";
+        }
+
         TelephonyManager telephony = (TelephonyManager) c.getSystemService(
                 Context.TELEPHONY_SERVICE);
         try {
@@ -101,9 +112,14 @@ public class SysUtils {
 
     @SuppressLint({"MissingPermission", "HardwareIds"})
     public static String getIMEINumber(Context c) {
-        TelephonyManager telephony = (TelephonyManager) c.getSystemService(
-                Context.TELEPHONY_SERVICE);
         try {
+            if (ContextCompat.checkSelfPermission(c,
+                    Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                StaticLogger.D("Permission : READ_PHONE_STATE NOT GRANTED!!!");
+                return "0";
+            }
+            TelephonyManager telephony = (TelephonyManager) c.getSystemService(
+                    Context.TELEPHONY_SERVICE);
             String imei = null;
             if (telephony != null) {
                 imei = telephony.getDeviceId();
