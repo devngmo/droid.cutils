@@ -11,11 +11,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.tml.libs.cutils.LoggableClass;
+import com.tml.libs.cutils.StaticLogger;
 
 /**
  * Created by TML.ITWORK on 12/19/2014.
  */
-public class LocalDB extends LoggableClass implements ILocalDB {
+public abstract class LocalDB implements ILocalDB {
     protected boolean loaded = false;
     protected LocalDBHelper dbh;
 
@@ -31,6 +32,16 @@ public class LocalDB extends LoggableClass implements ILocalDB {
     {
     	
     }
+
+	public int b2i(boolean value) {
+		if (value) return 1;
+		return  0;
+	}
+
+	public boolean i2b(int value) {
+		if (value <= 0) return false;
+		return  true;
+	}
 
     protected Context mContext;
     protected boolean mIsDBVersionUpgraded = false;
@@ -50,7 +61,7 @@ public class LocalDB extends LoggableClass implements ILocalDB {
 	}
 
 	public void onUpdateContentFinished() {
-		D("onUpdateContentFinished() isUpdated = true");
+		StaticLogger.I(this,"onUpdateContentFinished() isUpdated = true");
 		mIsUpdated = true;
 		mIsDBVersionUpgraded = false;
 		mHasUpdateRequest = false;
@@ -58,7 +69,7 @@ public class LocalDB extends LoggableClass implements ILocalDB {
 	
 	@Override
 	public void onUpgradeVersionFinished() {
-		D("onUpgradeVersionFinished()");
+		StaticLogger.I(this,"onUpgradeVersionFinished()");
 		mIsDBVersionUpgraded = true;
 		mIsUpdated = false;
 		requestUpdate();
@@ -69,10 +80,10 @@ public class LocalDB extends LoggableClass implements ILocalDB {
     }
 
     public void open(Context c) {
-        D("open()");
+        StaticLogger.I(this,"open()");
         try
         {
-        	if (mDBName == null)
+        	if (getLocalDBName() == null)
         		throw new Exception("DBName is NULL");
         	mContext = c;
             dbh = new LocalDBHelper(c, true, this);
@@ -82,13 +93,13 @@ public class LocalDB extends LoggableClass implements ILocalDB {
         }
         catch (Exception ex)
         {
-            E("open(): Exception: " + ex.getMessage());
+            StaticLogger.E(this,"open(): Exception: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
 
     public void close() {
-        D("close");
+        StaticLogger.I(this,"close");
         try {
             if (dbh != null)
                 dbh.close();
@@ -101,12 +112,12 @@ public class LocalDB extends LoggableClass implements ILocalDB {
     	if (isUpdated())
     		return true;
     	
-    	D("DB not ready: not updated");
+    	StaticLogger.I(this,"DB not ready: not updated");
 		return false;
 	}
     
     public void deleteTable(String tableName) {
-    	D("deleteTable: " + tableName);
+    	StaticLogger.I(this,"deleteTable: " + tableName);
     	try {
     		dbh.deleteTable(tableName);
     	}
@@ -116,17 +127,17 @@ public class LocalDB extends LoggableClass implements ILocalDB {
 	}
     
     public void Exec(String sql) {
-    	D("Exec: " + sql);
+    	StaticLogger.I(this,"Exec: " + sql);
     	if (dbh == null)
     	{
     		if (loaded)
     		{
-    			E("DB has loaded but dbh == null!");
+    			StaticLogger.E(this,"DB has loaded but dbh == null!");
     			return;
     		}
     		else
     		{
-    			E("DB must be loaded before call Exec(...)");
+    			StaticLogger.E(this,"DB must be loaded before call Exec(...)");
     		}
     	}
         dbh.exec(sql);
@@ -141,11 +152,11 @@ public class LocalDB extends LoggableClass implements ILocalDB {
     		return defaultValue;
     	
     	if (c.getCount() > 1)
-    		W("execGetInt32() expected return only 1 row, but actual return " + c.getCount() + " rows"); 
+    		StaticLogger.W(this,"execGetInt32() expected return only 1 row, but actual return " + c.getCount() + " rows");
     	
     	if (c.getColumnCount() <= columnIndex)
     	{
-    		E("execGetInt32(col " + columnIndex + ") but select only " + c.getColumnCount() + " columns");
+    		StaticLogger.E(this,"execGetInt32(col " + columnIndex + ") but select only " + c.getColumnCount() + " columns");
     		return defaultValue;
     	}
     	
@@ -157,7 +168,7 @@ public class LocalDB extends LoggableClass implements ILocalDB {
     		return value;
     	}
     	catch(Exception ex) {
-    		E("execGetInt32(col " + columnIndex + " as Int) but EXCEPTION Occur! SQL:" + selectSql, ex);    		
+    		StaticLogger.E(this,"execGetInt32(col " + columnIndex + " as Int) but EXCEPTION Occur! SQL:" + selectSql, ex);
     	}
     	
 		return defaultValue;
@@ -172,11 +183,11 @@ public class LocalDB extends LoggableClass implements ILocalDB {
     		return null;
     	
     	if (c.getCount() > 1)
-    		W("execGetString() expected return only 1 row, but actual return " + c.getCount() + " rows"); 
+    		StaticLogger.W(this,"execGetString() expected return only 1 row, but actual return " + c.getCount() + " rows");
     	
     	if (c.getColumnCount() <= columnIndex)
     	{
-    		E("execGetString(col " + columnIndex + ") but select only " + c.getColumnCount() + " columns");
+    		StaticLogger.E(this,"execGetString(col " + columnIndex + ") but select only " + c.getColumnCount() + " columns");
     		return null;
     	}
     	
@@ -188,7 +199,7 @@ public class LocalDB extends LoggableClass implements ILocalDB {
     		return s;
     	}
     	catch(Exception ex) {
-    		E("execGetString(col " + columnIndex + " as String) but EXCEPTION Occur! SQL:" + selectSql, ex);    		
+    		StaticLogger.E(this,"execGetString(col " + columnIndex + " as String) but EXCEPTION Occur! SQL:" + selectSql, ex);
     	}
     	
 		return null;
@@ -198,7 +209,7 @@ public class LocalDB extends LoggableClass implements ILocalDB {
      * db is opened, you can access it now ( cache something here,... )
      */
     public void onOpenSuccess() {
-		I(getLocalDBName() + "::onOpenSuccess");
+		StaticLogger.I(this,getLocalDBName() + "::onOpenSuccess");
     }
 
     public boolean isEmpty() {
@@ -216,16 +227,16 @@ public class LocalDB extends LoggableClass implements ILocalDB {
     }
 
     protected String mDBLocalFilePath;
-    protected String mDBName;
+//    protected String mDBName;
     @Override
     public String getDBLocalFilePath() {
         return mDBLocalFilePath;
     }
 
-    @Override
-    public String getLocalDBName() {
-        return mDBName;
-    }
+//    @Override
+//    public String getLocalDBName() {
+//        return mDBName;
+//    }
 
     public boolean isTableExist(String tableName) {
         return dbh.isTableExist(tableName);

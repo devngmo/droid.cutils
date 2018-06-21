@@ -31,6 +31,9 @@ public class StaticLogger {
     static String curAppTag;
     public static boolean logErrorOnAnyClasses = true;
 
+    public static boolean showInfo = true;
+    public static boolean showDebug = true;
+    public static boolean showAllClass = false;
 
     public static void setAppTag(String tag) {
         curAppTag = tag;
@@ -46,6 +49,7 @@ public class StaticLogger {
 
     public static void D(Object sender, String msg) {
         if (!isPrintable()) return;
+        if (!showDebug) return;
 
         String clsName = "null";
         if (sender instanceof String)
@@ -53,7 +57,7 @@ public class StaticLogger {
         else if (sender != null)
             clsName = sender.getClass().getSimpleName();
 
-        if (enableLogClasses.contains(clsName)) {
+        if (showAllClass || enableLogClasses.contains(clsName)) {
                 logStreamer.D(curAppTag, clsName, msg);
         }
     }
@@ -67,7 +71,7 @@ public class StaticLogger {
         else if (sender != null)
             clsName = sender.getClass().getSimpleName();
 
-        if (enableLogClasses.contains(clsName)) {
+        if (showAllClass || enableLogClasses.contains(clsName)) {
             logStreamer.W(curAppTag, clsName, msg);
         }
     }
@@ -84,6 +88,7 @@ public class StaticLogger {
 
     public static void I(Object sender, String msg) {
         if (!isPrintable()) return;
+        if (!showInfo) return;
 
         String clsName = "null";
         if (sender instanceof String)
@@ -91,15 +96,16 @@ public class StaticLogger {
         else if (sender != null)
             clsName = sender.getClass().getSimpleName();
 
-        if (enableLogClasses.contains(clsName)) {
+        if (showAllClass || enableLogClasses.contains(clsName)) {
              logStreamer.I(curAppTag, clsName, msg);
         }
     }
 
     public static void D(String className, String msg) {
         if (!isPrintable()) return;
+        if (!showDebug) return;
 
-        if (enableLogClasses.contains(className)) {
+        if (showAllClass || enableLogClasses.contains(className)) {
              logStreamer.D(curAppTag, className, msg);
             //System.out.println(className + "::" + msg);
         }
@@ -171,6 +177,7 @@ public class StaticLogger {
     }
     public static void D(String msg) {
         if (!isPrintable()) return;
+        if (!showDebug) return;
 
         logStreamer.D(curAppTag, "", msg);
     }

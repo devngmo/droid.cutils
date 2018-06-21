@@ -2,9 +2,12 @@ package com.tml.libs.cutils;
 
 import android.util.Base64;
 
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.text.ParseException;
@@ -183,5 +186,35 @@ public class StringUtils {
         Calendar b = Calendar.getInstance(locale);
         b.setTime(c.getTime());
         return b.get(Calendar.WEEK_OF_YEAR);
+    }
+
+    public static String hashMD5(String text) {
+        final String MD5 = "MD5";
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance(MD5);
+            digest.update(text.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    @Nullable
+    public static String floatToString(float val, boolean useDot) {
+        if (useDot) return ("" + val).replace(",", ".");
+        return "" + val;
     }
 }
