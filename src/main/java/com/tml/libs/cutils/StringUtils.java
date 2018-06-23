@@ -1,5 +1,6 @@
 package com.tml.libs.cutils;
 
+import android.os.Build;
 import android.util.Base64;
 
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +28,12 @@ import javax.crypto.spec.DESKeySpec;
  */
 
 public class StringUtils {
+
+    public static String getMIME() {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT)
+            return "text/html";
+        return "text/html; charset=utf-8";
+    }
 
     public static Calendar fromString(String text, String format, Locale locale) throws ParseException {
         Calendar cal = Calendar.getInstance();
