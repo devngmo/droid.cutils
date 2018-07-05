@@ -90,10 +90,17 @@ public class LocalDBHelper extends SQLiteOpenHelper {
     }
 
 
-    public void exec(String sql)
+    public boolean exec(String sql)
     {
         //DBG.LD(TAG, "exec: " + sql);
-        sqldb.execSQL(sql);        
+        try {
+            sqldb.execSQL(sql);
+            return true;
+        }
+        catch (Exception ex) {
+            StaticLogger.E(this, "unexpected ex: ", ex);
+        }
+        return false;
     }
     
     public SQLiteDatabase getSQLLite()

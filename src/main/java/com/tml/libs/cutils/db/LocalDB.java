@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import com.tml.libs.cutils.LoggableClass;
 import com.tml.libs.cutils.StaticLogger;
@@ -22,6 +23,8 @@ public abstract class LocalDB implements ILocalDB {
 
     protected String[] createQueryList;
     protected String[] dropQueryList;
+
+
 
     @Override
     public int getDBVersion() {
@@ -51,7 +54,10 @@ public abstract class LocalDB implements ILocalDB {
 	public boolean isUpdated() {
 		return mIsUpdated;
 	}
-	
+
+	/**
+	 * Request application update DB from server
+	 */
 	public void requestUpdate() {
 		mHasUpdateRequest = true;
 	}
@@ -79,8 +85,8 @@ public abstract class LocalDB implements ILocalDB {
         return loaded;
     }
 
-    public void open(Context c) {
-        StaticLogger.I(this,"open()");
+    public void open(@NonNull Context c) {
+        StaticLogger.D(this,"open()");
         try
         {
         	if (getLocalDBName() == null)
@@ -126,21 +132,22 @@ public abstract class LocalDB implements ILocalDB {
     	}
 	}
     
-    public void Exec(String sql) {
+    public boolean Exec(String sql) {
     	StaticLogger.I(this,"Exec: " + sql);
     	if (dbh == null)
     	{
     		if (loaded)
     		{
     			StaticLogger.E(this,"DB has loaded but dbh == null!");
-    			return;
+    			return false;
     		}
     		else
     		{
     			StaticLogger.E(this,"DB must be loaded before call Exec(...)");
     		}
     	}
-        dbh.exec(sql);
+
+        return dbh.exec(sql);
     }
     
     public int execGetInt32(int columnIndex, String selectSql, int defaultValue) {
@@ -326,5 +333,204 @@ public abstract class LocalDB implements ILocalDB {
 			c.moveToNext();
 		}
 		return ar;
+	}
+
+	protected float getFloat(Cursor c, int index, float defaultValue) {
+    	try {
+    		return c.getFloat(index);
+		}
+		catch (Exception ex) {
+    		return defaultValue;
+		}
+	}
+
+	protected int getInt(Cursor c, int index, int defaultValue) {
+		try {
+			return c.getInt(index);
+		}
+		catch (Exception ex) {
+			return defaultValue;
+		}
+	}
+
+	protected String getString(Cursor c, int index, String defaultValue) {
+		try {
+			return c.getString(index);
+		}
+		catch (Exception ex) {
+			return defaultValue;
+		}
+	}
+
+	protected JSONObject getJSON(Cursor c, ColumnInfo[] cols) {
+		try {
+			JSONObject o = new JSONObject();
+			for(int i = 0; i < cols.length; i++) {
+				int cidx = c.getColumnIndex(cols[i].name);
+				if (cols[i].type.equals("text"))
+					o.put(cols[i].name, c.getString(cidx));
+				else if (cols[i].type.equals("float"))
+					o.put(cols[i].name, c.getFloat(cidx));
+				else if (cols[i].type.equals("int"))
+					o.put(cols[i].name, c.getInt(cidx));
+			}
+			return o;
+		}
+		catch (Exception ex) {
+			return null;
+		}
+	}
+
+	protected JSONArray getItemAsJSONArray(String tableName, String where, String orderby, ColumnInfo[] cols) {
+		try {
+			String sql = "SELECT * FROM " + tableName;
+			if (where.trim().length() > 0)
+				sql += " WHERE " + where;
+
+			if (orderby.trim().length() > 0)
+				sql += " ORDER BY " + orderby;
+
+			Cursor c = dbh.rawQuery(sql);
+			JSONArray ar = new JSONArray();
+			if (c == null) return ar;
+			if (c.getCount() == 0) return ar;
+
+			c.moveToFirst();
+			while(!c.isAfterLast()) {
+				ar.put(getJSON(c, cols));
+				c.moveToNext();
+			}
+
+			return ar;
+		}
+		catch (Exception ex) {
+			return null;
+		}
+	}
+
+	public boolean addJSONArrayToTable(String tableName, JSONArray ar, ColumnInfo[] cols) {
+    	int passed = 0;
+    	try {
+			for (int i = 0; i < ar.length(); i++) {
+				boolean success = addJSONToTable(tableName, ar.getJSONObject(i), cols);
+				if (success)
+					passed++;
+			}
+		}
+		catch (Exception ex) {
+    		StaticLogger.E(this,
+					String.format("addJSONArrayToTable %s passed %d/%d",
+							tableName, passed, ar.length()), ex);
+		}
+		return passed == ar.length();
+	}
+
+	public boolean addJSONToTable(String tableName, JSONObject json, ColumnInfo[] cols) {
+    	StaticLogger.I(this, "addJSONToTable " + tableName);
+		String colNames = "";
+		String values = "";
+		try {
+			for (ColumnInfo c : cols) {
+				if (json.has(c.name)) {
+					if (colNames.length() > 0) {
+						colNames += ",";
+						values += ",";
+					}
+					colNames += c.name;
+					if (c.type == "text") {
+						values += String.format("'%s'", json.getString(c.name));
+					} else if (c.type == "int") {
+						String fieldVal = json.getString(c.name);
+						if (fieldVal == null || fieldVal.length() == 0)
+							values += "0";
+						else if (fieldVal.equals("true"))
+							values += "1";
+						else if (fieldVal.equals("false"))
+							values += "0";
+						else
+							values += fieldVal;
+					} else {
+						values += String.format("%s", json.getString(c.name));
+					}
+				}
+				else {
+					StaticLogger.W(this, "addJSONToTable: missing column " + c.name);
+				}
+			}
+			String sql = String.format("INSERT INTO %s(%s) VALUES (%s)", tableName, colNames, values);
+			boolean success = Exec(sql);
+			if (!success) {
+				StaticLogger.W(this, "addJSONToTable("+tableName+") " + json.toString());
+			}
+			return true;
+		}
+		catch (Exception ex) {
+			StaticLogger.E(this, "addJSONToTable("+json.toString()+") Unexpected EX: ", ex);
+		}
+		return false;
+	}
+
+	public static ColumnInfo CText(String name) {
+		return new ColumnInfo(name, "text");
+	}
+	public static ColumnInfo CInt(String name) {
+		return new ColumnInfo(name, "int");
+	}
+	public static ColumnInfo CFloat(String name) {
+		return new ColumnInfo(name, "float");
+	}
+
+	public static String genCreateTableQuery(String tableName, String[] primaryKeys, ColumnInfo[] cols) {
+    	String sql = "create table " + tableName + "(";
+    	String colDec = "";
+
+    	if (primaryKeys.length > 1) {
+    		String primKeys = "";
+			for(String keyName:primaryKeys) {
+				if (colDec.length() > 0) {
+					colDec += ",";
+					primKeys += ",";
+				}
+				ColumnInfo c = getColName(keyName, cols);
+				colDec += keyName + " " + c.type;
+				primKeys += keyName;
+			}
+			for(ColumnInfo c:cols) {
+				if (itemInArray(c.name, primaryKeys)) continue;
+				if (colDec.length() > 0)
+					colDec += ",";
+				colDec += c.name + " " + c.type;
+			}
+			colDec += ", PRIMARY KEY("+primKeys+")";
+		}
+		else {
+
+			for(String key:primaryKeys) {
+				ColumnInfo c = getColName(key, cols);
+				colDec += key + " " + c.type + " PRIMARY KEY";
+			}
+
+			for(ColumnInfo c:cols) {
+				if (itemInArray(c.name, primaryKeys)) continue;
+				if (colDec.length() > 0)
+					colDec += ",";
+				colDec += c.name + " " + c.type;
+			}
+		}
+    	sql += colDec + ")";
+    	return sql;
+	}
+
+	private static boolean itemInArray(String item, String[] list) {
+    	for(String e :list) {
+    		if (item.equals(e)) return true;
+		}
+		return false;
+	}
+
+	private static ColumnInfo getColName(String fieldName, ColumnInfo[] cols) {
+    	for (ColumnInfo c : cols)
+    		if (c.name.equals(fieldName)) return c;
+		return null;
 	}
 }
