@@ -224,6 +224,28 @@ public class FileUtils {
         return false;
     }
 
+    public static boolean moveFile(File src, File dst) {
+        try {
+            StaticLogger.D( "moveFile: src " + src.getAbsolutePath() + " dst " + dst.getAbsolutePath());
+            FileChannel inChannel = new FileInputStream(src).getChannel();
+            FileChannel outChannel = new FileOutputStream(dst).getChannel();
+//            try {
+                inChannel.transferTo(0, inChannel.size(), outChannel);
+//            } finally {
+                if (inChannel != null)
+                    inChannel.close();
+                if (outChannel != null)
+                    outChannel.close();
+//            }
+            src.delete();
+            return true;
+        }
+        catch (Exception ex) {
+            StaticLogger.E(ex);
+        }
+        return false;
+    }
+
     public static void copyAssetFileToSD(AssetManager am, String srcFilePath, File sdFile)  {
         Log.d(TAG, "copyAssetFileToSD: src " + srcFilePath + " dst " + sdFile.getAbsolutePath());
         InputStream in = null;
