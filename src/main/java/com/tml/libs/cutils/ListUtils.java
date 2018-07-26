@@ -42,7 +42,13 @@ public class ListUtils {
     }
 
 
-
+    /**
+     * create random list Indices (min, max)
+     *
+     * @param min min value (included)
+     * @param max max value (included)
+     * @return
+     */
     public static List<Integer> createRandomIndicesList(int min, int max) {
         List<Integer> ls = new ArrayList<>();
         for (int i = min; i <= max; i++) {
