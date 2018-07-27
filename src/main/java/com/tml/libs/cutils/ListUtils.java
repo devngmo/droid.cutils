@@ -1,5 +1,8 @@
 package com.tml.libs.cutils;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -55,7 +58,6 @@ public class ListUtils {
             ls.add(i);
         }
 
-        Random rnd = new Random();
         List<Integer> lsrand = new ArrayList<>();
         while(ls.size() > 0) {
             int index = rnd.nextInt(ls.size());
@@ -63,5 +65,12 @@ public class ListUtils {
             ls.remove(index);
         }
         return lsrand;
+    }
+
+    static Random rnd = new Random();
+    @NotNull
+    public static String pickAny(List<String> items) {
+        int idx = rnd.nextInt(items.size());
+        return items.get(idx);
     }
 }

@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +37,7 @@ import java.util.List;
  * Created by TML on 23/01/2017.
  */
 
+@SuppressWarnings("ALL")
 public class FileUtils {
     private static final String TAG = "FileUtils";
 
@@ -508,5 +510,18 @@ public class FileUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static boolean saveBinaryFile(@NotNull File file, @NotNull byte[] data) {
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(data);
+            fos.close();
+            return true;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
