@@ -1,7 +1,10 @@
 package com.tml.libs.cutils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -9,6 +12,13 @@ import java.util.List;
  */
 
 public class StaticLogger {
+    static HashMap<String, String> excludeMap = new HashMap<>();
+    public static void addExclude(@NotNull String className, @NotNull String verboses) {
+        if (excludeMap.containsKey(className)) {
+            excludeMap.put(className, excludeMap.get(className) + verboses);
+        }
+    }
+
     public interface LogStreamer {
         void D(String appTag, String className, String msg);
         void E(String appTag, String className, String msg);
@@ -51,11 +61,15 @@ public class StaticLogger {
         if (!isPrintable()) return;
         if (!showDebug) return;
 
+
         String clsName = "null";
         if (sender instanceof String)
             clsName = (String)sender;
         else if (sender != null)
             clsName = sender.getClass().getSimpleName();
+
+        if (excludeMap.containsKey(clsName))
+            if (excludeMap.get(clsName).contains("D")) return;
 
         if (showAllClass || enableLogClasses.contains(clsName)) {
                 logStreamer.D(curAppTag, clsName, msg);
@@ -70,6 +84,9 @@ public class StaticLogger {
             clsName = (String)sender;
         else if (sender != null)
             clsName = sender.getClass().getSimpleName();
+
+        if (excludeMap.containsKey(clsName))
+            if (excludeMap.get(clsName).contains("W")) return;
 
         if (showAllClass || enableLogClasses.contains(clsName)) {
             logStreamer.W(curAppTag, clsName, msg);
@@ -96,6 +113,9 @@ public class StaticLogger {
         else if (sender != null)
             clsName = sender.getClass().getSimpleName();
 
+        if (excludeMap.containsKey(clsName))
+            if (excludeMap.get(clsName).contains("I")) return;
+
         if (showAllClass || enableLogClasses.contains(clsName)) {
              logStreamer.I(curAppTag, clsName, msg);
         }
@@ -104,6 +124,9 @@ public class StaticLogger {
     public static void D(String className, String msg) {
         if (!isPrintable()) return;
         if (!showDebug) return;
+
+        if (excludeMap.containsKey(className))
+            if (excludeMap.get(className).contains("D")) return;
 
         if (showAllClass || enableLogClasses.contains(className)) {
              logStreamer.D(curAppTag, className, msg);
@@ -119,6 +142,9 @@ public class StaticLogger {
             clsName = (String)sender;
         else if (sender != null)
             clsName = sender.getClass().getSimpleName();
+
+        if (excludeMap.containsKey(clsName))
+            if (excludeMap.get(clsName).contains("E")) return;
 
         if (logErrorOnAnyClasses) {
              logStreamer.E(curAppTag, clsName, msg);
@@ -157,6 +183,9 @@ public class StaticLogger {
         if (sender != null)
             clsName = sender.getClass().getSimpleName();
 
+        if (excludeMap.containsKey(clsName))
+            if (excludeMap.get(clsName).contains("E")) return;
+
         if (logErrorOnAnyClasses) {
             logStreamer.E(curAppTag, clsName, msg, ex);
         }
@@ -178,6 +207,7 @@ public class StaticLogger {
     public static void D(String msg) {
         if (!isPrintable()) return;
         if (!showDebug) return;
+
 
         logStreamer.D(curAppTag, "", msg);
     }
