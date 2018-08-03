@@ -44,7 +44,6 @@ public class ListUtils {
         return ls;
     }
 
-
     /**
      * create random list Indices (min, max)
      *
@@ -72,5 +71,28 @@ public class ListUtils {
     public static String pickAny(List<String> items) {
         int idx = rnd.nextInt(items.size());
         return items.get(idx);
+    }
+
+    @NotNull
+    public static ArrayList<IDQty> pickQty(@NotNull List<String> items, int maxQty) {
+        int total = 0;
+        ArrayList<IDQty> ls = new ArrayList<>();
+        while(total < maxQty) {
+            int idx = rnd.nextInt(items.size());
+            int qty = MathUtils.clamp( rnd.nextInt(maxQty),1, maxQty - total );
+            String pickedItem = items.get(idx);
+            boolean addNew = true;
+            for (IDQty o : ls) {
+                if(o.id == pickedItem) {
+                    o.qty += qty;
+                    addNew = false;
+                    break;
+                }
+            }
+            if (addNew) {
+                ls.add(new IDQty(pickedItem, qty));
+            }
+        }
+        return ls;
     }
 }

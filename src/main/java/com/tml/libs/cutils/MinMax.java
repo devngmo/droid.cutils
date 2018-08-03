@@ -12,6 +12,12 @@ public class MinMax {
         this.max = max;
     }
 
+    public MinMax(String range) {
+        this.min = 0;
+        this.max = 0;
+        set(range);
+    }
+
     public void set(float min, float max) {
         this.min = min;
         this.max = max;
