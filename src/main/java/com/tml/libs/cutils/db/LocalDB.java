@@ -228,7 +228,11 @@ public abstract class LocalDB implements ILocalDB {
         return createQueryList;
     }
 
-    @Override
+	/**
+	 * drop query: DROP TABLE IF EXISTS TABLE_NAME
+	 * @return
+	 */
+	@Override
     public String[] getDropQueryList() {
         return dropQueryList;
     }
