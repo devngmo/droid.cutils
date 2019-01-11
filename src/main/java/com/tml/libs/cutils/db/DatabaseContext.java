@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
+import com.tml.libs.cutils.StaticLogger;
 
 import java.io.File;
 
@@ -31,6 +32,7 @@ public class DatabaseContext extends ContextWrapper {
         if (!dbFile.getParentFile().exists()) {
         	dbFile.getParentFile().mkdirs();
         }
+        StaticLogger.D("DatabaseContext", "db file path " + dbFilePath);
 //        DBG.LD(TAG,
 //                "getDatabasePath() = "
 //                        + dbFile.getAbsolutePath());

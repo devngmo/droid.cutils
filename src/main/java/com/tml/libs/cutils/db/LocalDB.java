@@ -131,8 +131,19 @@ public abstract class LocalDB implements ILocalDB {
     		
     	}
 	}
-    
-    public boolean Exec(String sql) {
+
+	public Cursor Select(String sql) {
+		return dbh.rawQuery(sql);
+	}
+
+	public boolean Insert(String sql) {
+		return Exec(sql);
+	}
+
+	public boolean Update(String sql) {
+		return Exec(sql);
+	}
+	public boolean Exec(String sql) {
     	StaticLogger.I(this,"Exec: " + sql);
     	if (dbh == null)
     	{

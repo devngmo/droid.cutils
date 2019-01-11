@@ -61,7 +61,6 @@ public class LocalDBHelper extends SQLiteOpenHelper {
         
     }
 
-
     /**
      * UPDATE TABLE SET COL = value (bit: 1 or 0)
      * @param table
