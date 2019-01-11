@@ -449,11 +449,11 @@ public class FileUtils {
         }
     }
 
-    public static void saveBitmap(Bitmap bmp, String filePath) {
+    public static void saveBitmap(Bitmap bmp, String filePath, Bitmap.CompressFormat compressFormat) {
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(filePath);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, out); // bmp is your Bitmap instance
+            bmp.compress(compressFormat, 100, out); // bmp is your Bitmap instance
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
