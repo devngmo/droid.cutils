@@ -99,6 +99,26 @@ public class FileUtils {
         }
     }
 
+    /**
+     * append "@appendPrefix + @text" to file
+     * @param c
+     * @param text
+     * @param f
+     * @param appendPrefix
+     */
+    public static void appendText(Context c, String text, File f, String appendPrefix) {
+        try {
+            FileOutputStream fos = new FileOutputStream(f, true);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fos);
+            outputStreamWriter.append(appendPrefix);
+            outputStreamWriter.append(text);
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void writeAllBytes(Context c, byte[] data, File f) {
         try {
             if (f.exists())
@@ -134,6 +154,25 @@ public class FileUtils {
                     outputStreamWriter.write(lineBreak);
             }
             outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void appendLines(Context c, List<String> lines, String lineBreak, File f, Boolean addLineBreakFirst) {
+        try {
+            FileOutputStream fos = new FileOutputStream(f, true);
+            OutputStreamWriter osw = new OutputStreamWriter(fos);
+            if (addLineBreakFirst)
+                osw.append(lineBreak);
+
+            for (int i = 0; i < lines.size(); i++) {
+                osw.append(lines.get(i));
+                if (i < lines.size() - 1)
+                    osw.append(lineBreak);
+            }
+            osw.close();
         }
         catch (IOException e) {
             e.printStackTrace();
