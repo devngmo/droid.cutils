@@ -33,6 +33,7 @@ class EventHub {
         }
         else {
             val ls = ArrayList<EventHubListener>()
+            if (ls.contains(listener)) return
             ls.add(listener)
             channelMap.put(channel, ls)
         }
