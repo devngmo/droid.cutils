@@ -13,7 +13,7 @@ class SDUtils {
                 val getVolumeList = storageManager.javaClass.getMethod("getVolumeList")
                 val getPath = storageVolumeClazz.getMethod("getPath")
                 val isRemovable = storageVolumeClazz.getMethod("isRemovable")
-                val result = getVolumeList.invoke(storageManager) as Array<StorageVolume>
+                val result = getVolumeList.invoke(storageManager) as Array<*>
                 result.forEach {
                     if (isRemovable.invoke(it) as Boolean) {
                         return File(getPath.invoke(it) as String)
