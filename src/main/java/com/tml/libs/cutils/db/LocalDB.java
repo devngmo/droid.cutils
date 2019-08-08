@@ -9,9 +9,6 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.NonNull;
-
-import com.tml.libs.cutils.LoggableClass;
 import com.tml.libs.cutils.StaticLogger;
 
 /**
@@ -85,7 +82,7 @@ public abstract class LocalDB implements ILocalDB {
         return loaded;
     }
 
-    public void open(@NonNull Context c) {
+    public void open(Context c) {
         StaticLogger.D(this,"open()");
         try
         {
