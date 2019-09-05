@@ -3,6 +3,7 @@ package com.tml.libs.cutils;
 import android.os.Build;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +29,7 @@ public class JSONUtils {
             return obj.get(key).getAsString();
         }
         catch (Exception ex) {
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().disableHtmlEscaping().create();
             StaticLogger.W("property ["+key+"] not found in : " + gson.toJson(obj));
             ex.printStackTrace();
         }
