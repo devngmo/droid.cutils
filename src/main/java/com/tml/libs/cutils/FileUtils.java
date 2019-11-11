@@ -136,13 +136,14 @@ public class FileUtils {
         }
     }
 
-    public static void writeAllText(Context c, List<String> lines, String lineBreak, File f) {
+    public static boolean writeAllText(Context c, List<String> lines, String lineBreak, File f) {
         try {
             if (f.exists())
                 f.delete();
 
-            if (f.createNewFile() == false)
-                return;
+            if (f.createNewFile() == false) {
+                return false;
+            }
 
             FileOutputStream fos = new FileOutputStream(f);
 
@@ -154,10 +155,12 @@ public class FileUtils {
                     outputStreamWriter.write(lineBreak);
             }
             outputStreamWriter.close();
+            return true;
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     public static void appendLines(Context c, List<String> lines, String lineBreak, File f, Boolean addLineBreakFirst) {
