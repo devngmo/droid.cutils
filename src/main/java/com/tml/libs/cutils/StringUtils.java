@@ -43,9 +43,15 @@ public class StringUtils {
     }
 
     public static String getString(Calendar c, String format, Locale locale) {
-        DateFormat df = new SimpleDateFormat(format, Locale.ENGLISH);
+        DateFormat df = new SimpleDateFormat(format, locale);
         return df.format(c.getTime());
     }
+
+    public static String getString(Date date, String format, Locale locale) {
+        DateFormat df = new SimpleDateFormat(format, locale);
+        return df.format(date);
+    }
+
 
     public static String createDateTimeStr_yyyy_MM_dd_HH_mm_ss() {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);

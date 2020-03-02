@@ -69,7 +69,7 @@ public class StaticLogger {
             clsName = sender.getClass().getSimpleName();
 
         if (excludeMap.containsKey(clsName))
-            if (excludeMap.get(clsName).contains("D")) return;
+            return;
 
         if (showAllClass || enableLogClasses.contains(clsName)) {
                 logStreamer.D(curAppTag, clsName, msg);
