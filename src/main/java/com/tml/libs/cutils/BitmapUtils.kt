@@ -4,10 +4,13 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
-import androidx.annotation.ColorInt
-import androidx.annotation.DrawableRes
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.DrawableCompat
+import android.support.annotation.DrawableRes
+import android.support.v4.content.res.ResourcesCompat
+
+//import androidx.annotation.ColorInt
+//import androidx.annotation.DrawableRes
+//import androidx.core.content.res.ResourcesCompat
+//import androidx.core.graphics.drawable.DrawableCompat
 
 
 class BitmapUtils {
