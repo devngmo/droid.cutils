@@ -13,7 +13,7 @@ class EventHub {
         if (channel in channelMap) {
             var triggered = false
             for(lis in channelMap[channel]!!) {
-                StaticLogger.I(this, "$channel: $evt")
+                //StaticLogger.I(this, "$channel: $evt")
                 lis.onChannelEvent(evt, data)
                 triggered = true
             }
