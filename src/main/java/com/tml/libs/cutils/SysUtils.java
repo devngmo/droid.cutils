@@ -15,13 +15,13 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
-import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-//import androidx.core.content.ContextCompat;
+
+import androidx.core.content.ContextCompat;
 
 /**
  * Created by TML on 4/26/2017.

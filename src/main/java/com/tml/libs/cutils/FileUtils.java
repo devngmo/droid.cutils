@@ -7,10 +7,10 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-//import androidx.core.content.ContextCompat;
+import androidx.core.content.ContextCompat;
+
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,9 +30,11 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
-import java.nio.file.attribute.FileStoreAttributeView;
 import java.util.ArrayList;
 import java.util.List;
+
+//import android.support.v4.content.ContextCompat;
+//import androidx.core.content.ContextCompat;
 
 /**
  * Created by TML on 23/01/2017.
