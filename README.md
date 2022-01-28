@@ -1,2 +1,2 @@
-# droidstuffs
-All android apps, libs
+# Cutils
+Android Common Utilities
